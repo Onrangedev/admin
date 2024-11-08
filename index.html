@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="shortcut icon" href="../assets/icon-transparent.png" type="image/x-icon">
+    <title>Onrange - ADMIN</title>
+  </head>
+  <body>
+    <header class="header">
+      <button id="authorize_button" class="btns" onclick="handleAuthClick()">Autorizar</button>
+      <button id="signout_button" class="btns" onclick="handleSignoutClick()">Desconectar</button>
+      <button class="btns btn-salvar">Salvar</button>
+      <button class="btns btn-adicionar">Adicionar Item</button>
+    </header>
+
+    <div class="container">
+      <div class="card" data-day="2" tabindex="0" aria-label="Cartão 2">
+        <div class="menu-dia">
+          <h3>Segunda-feira</h3>
+          <div class="meal">
+            <strong class="merenda">MERENDA</strong>
+            <select data-day="0" class="select select-merenda"></select>
+            <strong class="almoco">ALMOÇO</strong>
+            <select data-day="0" class="select select-almoco"></select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" data-day="2" tabindex="0" aria-label="Cartão 2">
+        <div class="menu-dia">
+          <h3>Terça-feira</h3>
+          <div class="meal">
+            <strong class="merenda">MERENDA</strong>
+            <select data-day="1" class="select select-merenda"></select>
+            <strong class="almoco">ALMOÇO</strong>
+            <select data-day="1" class="select select-almoco"></select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" data-day="2" tabindex="0" aria-label="Cartão 2">
+        <div class="menu-dia">
+          <h3>Quarta-feira</h3>
+          <div class="meal">
+            <strong class="merenda">MERENDA</strong>
+            <select data-day="2" class="select select-merenda"></select>
+            <strong class="almoco">ALMOÇO</strong>
+            <select data-day="2" class="select select-almoco"></select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" data-day="2" tabindex="0" aria-label="Cartão 2">
+        <div class="menu-dia">
+          <h3>Quinta-feira</h3>
+          <div class="meal">
+            <strong class="merenda">MERENDA</strong>
+            <select data-day="3" class="select select-merenda"></select>
+            <strong class="almoco">ALMOÇO</strong>
+            <select data-day="3" class="select select-almoco"></select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" data-day="2" tabindex="0" aria-label="Cartão 2">
+        <div class="menu-dia">
+          <h3>Sexta-feira</h3>
+          <div class="meal">
+            <strong class="merenda">MERENDA</strong>
+            <select data-day="4" class="select select-merenda"></select>
+            <strong class="almoco">ALMOÇO</strong>
+            <select data-day="4" class="select select-almoco"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script src="https://apis.google.com/js/api.js" async defer onload="gapiLoaded()"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer onload="gisLoaded()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>

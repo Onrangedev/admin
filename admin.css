@@ -1,0 +1,56 @@
+@import url(./root.css);
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    background-color: #1a1f24;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    gap: 5px;
+}
+
+.container {
+    display:  flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 1000px;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pg-color);
+    padding: 20px;
+    width: 200px;
+    border-radius: 10px;
+}
+
+.meal {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
+
+.inp {
+    width: 50%;
+}
+
+.btn-salvar {
+    display: none;
+    background-color: var(--green);
+}
+
+.btn-salvar:hover, .btn-salvar:active {
+    background-color: var(--green);
+}
