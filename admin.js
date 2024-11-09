@@ -1,6 +1,5 @@
 const CLIENT_ID = '293531894729-htvn6ikdidqnbt83stj818k8mmh2u3ov.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyAEOb_1iv4NXFeV7OQph2FW5UpqCUiGMcc';
-
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
@@ -117,6 +116,7 @@ function handleAuthClick() {
         const token = gapi.client.getToken();
         localStorage.setItem('access_token', token.access_token);
         document.getElementById('signout_button').style.display = 'inline';
+        document.getElementById('authorize_button').style.display = 'none';
     };
 
     const storedToken = localStorage.getItem('access_token');
@@ -139,9 +139,9 @@ function handleSignoutClick() {
     if (token !== null) {
         google.accounts.oauth2.revoke(token.access_token);
         gapi.client.setToken('');
-        localStorage.removeItem('access_token'); // Remove token from localStorage
-        document.getElementById('authorize_button').innerText = 'Authorize';
+        localStorage.removeItem('access_token');
         document.getElementById('signout_button').style.display = 'none';
+        location.reload();
     }
 }
 
@@ -160,9 +160,9 @@ function salvarServer(range, array) {
         gapi.client.sheets.spreadsheets.values.batchUpdate({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             resource: { data: { range: range, values: transpose(array) }, valueInputOption: 'RAW' },
-        }).then((response) => {
+        }).then(() => {
             ocultarSalvar();
-            console.log(response.result);
+            alert('Cardápio alterado com sucesso!');
         });
     } catch (err) {
         console.error(err.message);
@@ -213,24 +213,3 @@ async function adicionarItem() {
     }
     window.location.reload();
 }
-
-// Carrega o tema
-// const savedTheme = localStorage.getItem('cardapio-theme');
-
-// if (savedTheme) {
-//     if (savedTheme === 'auto') {
-//         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-//             document.documentElement.classList.add('dark');
-//         } else {
-//             document.documentElement.classList.add('light');
-//         }
-//     } else {
-//         document.documentElement.classList.add(savedTheme);
-//     }
-// } else {
-//     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-//         document.documentElement.classList.add('dark');
-//     } else {
-//         document.documentElement.classList.add('light');
-//     }
-// }
