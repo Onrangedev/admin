@@ -1,0 +1,52 @@
+{
+    "name": "Onrange admin",
+    "short_name": "Onrange admin",
+    "description": "Administre o Onrange de forma fácil.",
+    "start_url": "/admin",
+    "display": "standalone",
+    "background_color": "#1a1f24",
+    "theme_color": "#1a1f24",
+    "orientation": "portrait",
+    "scope": "/",
+    "lang": "pt-BR",
+    "dir": "ltr",
+    "categories": [
+      "productivity",
+      "utilities",
+      "food"
+    ],
+    "icons": [
+      {
+        "purpose": "maskable",
+        "sizes": "512x512",
+        "src": "/assets/icon-x512.png",
+        "type": "image/png"
+      },
+      {
+        "purpose": "maskable",
+        "sizes": "384x384",
+        "src": "/assets/icon-x384.png",
+        "type": "image/png"
+      },
+      {
+        "purpose": "maskable",
+        "sizes": "192x192",
+        "src": "/assets/icon-x192.png",
+        "type": "image/png"
+      },
+      {
+        "purpose": "maskable",
+        "sizes": "128x128",
+        "src": "/assets/icon-x128.png",
+        "type": "image/png"
+      },
+      {
+        "purpose": "maskable",
+        "sizes": "72x72",
+        "src": "/assets/icon-x72.png",
+        "type": "image/png"
+      }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false
+}
