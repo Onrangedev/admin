@@ -10,6 +10,7 @@ let gisInited = false;
 let menu = [];
 
 document.getElementById('authorize_button').style.display = 'none';
+document.querySelector('.logged-out-msg').style.display = 'none';
 document.getElementById('signout_button').style.display = 'none';
 
 document.querySelector('.btn-salvar').addEventListener('click', () => salvarServer('admin!A1:B', [menu[0], menu[1]]));
@@ -106,6 +107,7 @@ function maybeEnableButtons() {
             loadCards();
         } else {
             document.getElementById('authorize_button').style.display = 'inline';
+            document.querySelector('.logged-out-msg').style.display = 'block';
         }
     }
 }
@@ -129,6 +131,7 @@ function handleAuthClick() {
         localStorage.setItem('access_token', token.access_token);
         document.getElementById('signout_button').style.display = 'inline';
         document.getElementById('authorize_button').style.display = 'none';
+        document.querySelector('.logged-out-msg').style.display = 'none';
         loadCards();
     };
 
