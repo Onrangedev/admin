@@ -103,6 +103,7 @@ function maybeEnableButtons() {
         if (storedToken) {
             gapi.client.setToken({ access_token: storedToken });
             document.getElementById('signout_button').style.display = 'inline';
+            loadCards();
         } else {
             document.getElementById('authorize_button').style.display = 'inline';
         }
@@ -111,6 +112,11 @@ function maybeEnableButtons() {
 
 function exibirSalvar(value) {
     document.querySelector('.btn-salvar').style.display = value;
+}
+
+function loadCards() {
+    document.querySelector('.container').style.display = 'flex';
+    document.querySelector('.logged-out-msg').style.display = 'none';
 }
 
 // Sign in the user upon button click and store the token in localStorage.
@@ -123,6 +129,7 @@ function handleAuthClick() {
         localStorage.setItem('access_token', token.access_token);
         document.getElementById('signout_button').style.display = 'inline';
         document.getElementById('authorize_button').style.display = 'none';
+        loadCards();
     };
 
     const storedToken = localStorage.getItem('access_token');

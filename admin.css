@@ -18,8 +18,21 @@ body {
     gap: 5px;
 }
 
+.logged-out-msg {
+    width: 80%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+
+.logged-out-msg span {
+    font-weight: bolder;
+    cursor: pointer;
+}
+
 .container {
-    display:  flex;
+    display: none;
     justify-content: center;
     align-items: center;
     gap: 20px;
