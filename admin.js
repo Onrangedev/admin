@@ -57,6 +57,8 @@ async function obterDados() {
         });
         
         menu = transpose(response.result.values);
+        console.log(menu);
+        
         printOptions();
     } catch (err) {
         console.error(err.message);
@@ -69,19 +71,29 @@ function printOptions() {
         almoco: document.querySelectorAll('.select-almoco')
     };
 
-    ['merenda', 'almoco'].forEach((meal, index) => {
-        selectElements[meal].forEach((element, i) => {
-            menu[index + 3].forEach(item => {
+    const meals = ['merenda', 'almoco'];
+
+    meals.forEach((meal, mealIndex) => {
+        const elements = selectElements[meal];
+        const menuItems = menu[mealIndex + 3];
+        const defaultValues = menu[mealIndex];
+
+        elements.forEach((element, elementIndex) => {
+            menuItems.forEach(item => {
                 if (item) {
-                    const [text, value] = item.split('/');
-                    const option = new Option(text, value);
+                    const option = createOption(item);
                     element.appendChild(option);
 
-                    if (value === menu[index][i]) element.value = value;
+                    if (option.value === defaultValues[elementIndex]) element.value = option.value;
                 }
             });
         });
     });
+}
+
+function createOption(item) {
+    const [text] = item.split('/');
+    return new Option(text, item);
 }
 
 // Enables user interaction after all libraries are loaded and checks if token exists in localStorage.
@@ -97,14 +109,8 @@ function maybeEnableButtons() {
     }
 }
 
-// Exibi o botão de salvar
-function exibirSalvar() {
-    document.querySelector('.btn-salvar').style.display = 'block';
-}
-
-// Oculta o botão de salvar
-function ocultarSalvar() {
-    document.querySelector('.btn-salvar').style.display = 'none';
+function exibirSalvar(value) {
+    document.querySelector('.btn-salvar').style.display = value;
 }
 
 // Sign in the user upon button click and store the token in localStorage.
@@ -147,12 +153,12 @@ function handleSignoutClick() {
 
 function alterarMerenda(element) {    
     menu[0].splice(element.dataset.day, 1, element.value);
-    exibirSalvar();
+    exibirSalvar('block');
 }
 
 function alterarAlmoco(element) {
     menu[1].splice(element.dataset.day, 1, element.value);
-    exibirSalvar();
+    exibirSalvar('block');
 }
 
 function salvarServer(range, array) {
@@ -161,7 +167,7 @@ function salvarServer(range, array) {
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             resource: { data: { range: range, values: transpose(array) }, valueInputOption: 'RAW' },
         }).then(() => {
-            ocultarSalvar();
+            exibirSalvar('none');
             alert('Cardápio alterado com sucesso!');
         });
     } catch (err) {
@@ -181,7 +187,7 @@ async function adicionarItem() {
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
                 <select class="select" id="select">
                     <option value="merenda" selected>Merenda</option>
-                    <option value="almoco" selected>Almoço</option>
+                    <option value="almoco">Almoço</option>
                 </select>
                 <label for="swal-input1">Nome</label>
                 <input type="text" id="swal-input1" class="inp">
@@ -195,21 +201,27 @@ async function adicionarItem() {
         `,
         focusConfirm: false,
         preConfirm: () => {
-        return [
-            document.getElementById("swal-input1").value,
-            document.getElementById("swal-input2").value,
-            document.getElementById("swal-input3").checked,
-            document.getElementById("select").value
-        ];
+            return {
+                nome: document.getElementById("swal-input1").value,
+                calorias: document.getElementById("swal-input2").value,
+                lactose: document.getElementById("swal-input3").checked,
+                tipo: document.getElementById("select").value
+            };
         }
     });
 
-    if (formValues[3] === 'merenda') {
-        menu[3].push(`${formValues[0]}/${Math.floor(Date.now() * Math.random()).toString(36)}/${formValues[1]}/${formValues[2]}`);
-        salvarServer('admin!D1:E', [menu[3]]);
-    } else if (formValues[3] === 'almoco') {
-        menu[4].push(`${formValues[0]}/${Math.floor(Date.now() * Math.random()).toString(36)}/${formValues[1]}/${formValues[2]}`);
-        salvarServer('admin!E1:F', [menu[4]]);
+    if (formValues) {
+        const { nome, calorias, lactose, tipo } = formValues;
+        const itemData = `${nome}/${generateUniqueId()}/${calorias}/${lactose}`;
+        const menuIndex = tipo === 'merenda' ? 3 : 4;
+        const range = tipo === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
+
+        menu[menuIndex].push(itemData);
+        salvarServer(range, [menu[menuIndex]]);
+        window.location.reload();
     }
-    window.location.reload();
+}
+
+function generateUniqueId() {
+    return Math.floor(Date.now() * Math.random()).toString(36);
 }
