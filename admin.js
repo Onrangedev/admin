@@ -62,6 +62,7 @@ async function obterDados() {
         
         printOptions();
     } catch (err) {
+        if (err.status === 401) signout();
         console.error(err.message);
     }
 }
@@ -150,7 +151,7 @@ function handleAuthClick() {
 }
 
 // Sign out the user upon button click and remove token from localStorage.
-function handleSignoutClick() {
+function signout() {
     const token = gapi.client.getToken();
     if (token !== null) {
         google.accounts.oauth2.revoke(token.access_token);
