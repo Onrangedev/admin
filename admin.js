@@ -13,11 +13,11 @@ document.getElementById('authorize_button').style.display = 'none';
 document.querySelector('.logged-out-msg').style.display = 'none';
 document.getElementById('signout_button').style.display = 'none';
 
-document.querySelector('.btn-salvar').addEventListener('click', () => salvarServer('admin!A1:B', [menu[0], menu[1]]));
-document.querySelector('.btn-adicionar').addEventListener('click', () => adicionarItem());
+document.querySelector('.btn-salvar').addEventListener('click', () => saveServer('admin!A1:B', [menu[0], menu[1]]));
+document.querySelector('.btn-adicionar').addEventListener('click', () => addItem());
 
-document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => alterarMerenda(element)));
-document.querySelectorAll('.select-almoco').forEach((element) => element.addEventListener('change', () => alterarAlmoco(element)));
+document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
+document.querySelectorAll('.select-almoco').forEach((element) => element.addEventListener('change', () => changeLunch(element)));
 
 // Callback after api.js is loaded.
 function gapiLoaded() {
@@ -32,8 +32,8 @@ async function initializeGapiClient() {
             discoveryDocs: [DISCOVERY_DOC],
         });
         gapiInited = true;
-        maybeEnableButtons();
-        obterDados();
+        loadButtons();
+        getData();
     } catch (error) {
         console.error("Error loading GAPI client:", error);
     }
@@ -47,10 +47,11 @@ function gisLoaded() {
         callback: '',
     });
     gisInited = true;
-    maybeEnableButtons();
+    loadButtons();
 }
 
-async function obterDados() {
+// Get data from Google Sheets server
+async function getData() {
     try {
         const response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
@@ -60,14 +61,15 @@ async function obterDados() {
         menu = transpose(response.result.values);
         console.log(menu);
         
-        printOptions();
+        printMenuOptions();
     } catch (err) {
         if (err.status === 401) signout();
         console.error(err.message);
     }
 }
 
-function printOptions() {
+// Print the snack and lunch options on the menu
+function printMenuOptions() {
     const selectElements = {
         merenda: document.querySelectorAll('.select-merenda'),
         almoco: document.querySelectorAll('.select-almoco')
@@ -83,7 +85,7 @@ function printOptions() {
         elements.forEach((element, elementIndex) => {
             menuItems.forEach(item => {
                 if (item) {
-                    const option = createOption(item);
+                    const option = createMenuOption(item);
                     element.appendChild(option);
 
                     if (option.value === defaultValues[elementIndex]) element.value = option.value;
@@ -93,13 +95,13 @@ function printOptions() {
     });
 }
 
-function createOption(item) {
+function createMenuOption(item) {
     const [text] = item.split('/');
     return new Option(text, item);
 }
 
-// Enables user interaction after all libraries are loaded and checks if token exists in localStorage.
-function maybeEnableButtons() {
+// Enables user interaction after all libraries are loaded and checks if token exists in localStorage
+function loadButtons() {
     if (gapiInited && gisInited) {
         const storedToken = localStorage.getItem('access_token');
         if (storedToken) {
@@ -113,17 +115,19 @@ function maybeEnableButtons() {
     }
 }
 
-function exibirSalvar(value) {
+// Show the button save
+function showSaveBtn(value) {
     document.querySelector('.btn-salvar').style.display = value;
 }
 
+// Load cards for changing menu
 function loadCards() {
     document.querySelector('.container').style.display = 'flex';
     document.querySelector('.logged-out-msg').style.display = 'none';
 }
 
-// Sign in the user upon button click and store the token in localStorage.
-function handleAuthClick() {
+// Sign in the user upon button click and store the token in localStorage
+function auth() {
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) throw (resp);
 
@@ -162,23 +166,26 @@ function signout() {
     }
 }
 
-function alterarMerenda(element) {    
+// Change snack
+function changeSnack(element) {    
     menu[0].splice(element.dataset.day, 1, element.value);
-    exibirSalvar('block');
+    showSaveBtn('block');
 }
 
-function alterarAlmoco(element) {
+// Change lunch
+function changeLunch(element) {
     menu[1].splice(element.dataset.day, 1, element.value);
-    exibirSalvar('block');
+    showSaveBtn('block');
 }
 
-function salvarServer(range, array) {
+// Save of menu in google sheets
+function saveServer(range, array) {
     try {
         gapi.client.sheets.spreadsheets.values.batchUpdate({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             resource: { data: { range: range, values: transpose(array) }, valueInputOption: 'RAW' },
         }).then(() => {
-            exibirSalvar('none');
+            showSaveBtn('none');
             alert('Cardápio alterado com sucesso!');
         });
     } catch (err) {
@@ -186,12 +193,13 @@ function salvarServer(range, array) {
     }
 }
 
-// Função para transpor (converter linhas em colunas)
+// Função para transpor (convert rows to columns)
 function transpose(matrix) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
 }
 
-async function adicionarItem() {
+// Load a dialog to add a new item to the server
+async function addItem() {
     const { value: formValues } = await Swal.fire({
         title: "Adicionar",
         html: `
@@ -228,11 +236,12 @@ async function adicionarItem() {
         const range = tipo === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
 
         menu[menuIndex].push(itemData);
-        salvarServer(range, [menu[menuIndex]]);
+        saveServer(range, [menu[menuIndex]]);
         window.location.reload();
     }
 }
 
+// Make a random ID
 function generateUniqueId() {
     return Math.floor(Date.now() * Math.random()).toString(36);
 }
