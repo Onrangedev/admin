@@ -18,6 +18,10 @@ body {
     gap: 5px;
 }
 
+.auth-btn, .logged-out-msg, .sing-btn, .database-btn {
+    display: none;
+}
+
 .logged-out-msg {
     width: 80%;
     position: absolute;
@@ -59,7 +63,7 @@ body {
     width: 50%;
 }
 
-.btn-salvar {
+.save-btn {
     display: none;
     background-color: var(--green);
 }

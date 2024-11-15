@@ -75,9 +75,7 @@ function postData(range, array) {
         gapi.client.sheets.spreadsheets.values.batchUpdate({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             resource: { data: { range: range, values: transpose(array) }, valueInputOption: 'RAW' },
-        }).then(() => {
-            console.log('Itens alterados!');
-        });
+        }).then();
     } catch (err) {
         console.error(err.message);
     }
@@ -89,9 +87,7 @@ async function deleteData(column, startRow) {
         gapi.client.sheets.spreadsheets.values.clear({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             range: `admin!${column}${startRow}:${column}`,
-        }).then(() => {
-            console.log("itens deletados!");
-        });
+        }).then();
     } catch (err) {
         console.error(err.message);
     }
