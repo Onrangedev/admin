@@ -12,6 +12,7 @@ let menu = [];
 document.getElementById('authorize_button').style.display = 'none';
 document.querySelector('.logged-out-msg').style.display = 'none';
 document.getElementById('signout_button').style.display = 'none';
+document.querySelector('.btn-database').style.display = 'none';
 
 document.querySelector('.btn-salvar').addEventListener('click', () => saveServer('admin!A1:B', [menu[0], menu[1]]));
 document.querySelector('.btn-adicionar').addEventListener('click', () => addItem());
@@ -107,6 +108,7 @@ function loadButtons() {
         if (storedToken) {
             gapi.client.setToken({ access_token: storedToken });
             document.getElementById('signout_button').style.display = 'inline';
+            document.querySelector('.btn-database').style.display = 'inline';
             loadCards();
         } else {
             document.getElementById('authorize_button').style.display = 'inline';
@@ -135,6 +137,7 @@ function auth() {
         const token = gapi.client.getToken();
         localStorage.setItem('access_token', token.access_token);
         document.getElementById('signout_button').style.display = 'inline';
+        document.querySelector('.btn-database').style.display = 'inline';
         document.getElementById('authorize_button').style.display = 'none';
         document.querySelector('.logged-out-msg').style.display = 'none';
         loadCards();
@@ -162,6 +165,7 @@ function signout() {
         gapi.client.setToken('');
         localStorage.removeItem('access_token');
         document.getElementById('signout_button').style.display = 'none';
+        document.querySelector('.btn-database').style.display = 'none';
         location.reload();
     }
 }

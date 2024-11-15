@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Banco de dados</title>
+</head>
+<body>
+    <header class="header">
+        <a class="btns" href="../index.html">Voltar</a>
+    </header>
+    <main class="main">
+        <select class="select" id="select">
+            <option value="merenda" selected>Merenda</option>
+            <option value="almoco">Almoço</option>
+        </select>
+        <section class="itens"></section>
+    </main>
+    <script src="./main.js"></script>
+    <script src="https://apis.google.com/js/api.js" async defer onload="gapiLoaded()"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer onload="gisLoaded()"></script>
+</body>
+</html>

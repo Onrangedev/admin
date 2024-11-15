@@ -1,0 +1,63 @@
+@import url(../root.css);
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    background-color: #1a1f24;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    gap: 5px;
+}
+
+header .btn-salvar {
+    display: none;
+    background-color: var(--green);
+}
+
+header .btn-salvar:hover, .btn-salvar:active {
+    background-color: var(--green);
+}
+
+
+main {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+main section {
+    width: 50%;
+}
+
+main div {
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--pg-color);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+main div .delete {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 800px) {
+    main section {
+        width: 100%;
+    }
+}
