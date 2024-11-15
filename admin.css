@@ -22,6 +22,10 @@ body {
     display: none;
 }
 
+.status-select {
+    background-color: #ffffff77;
+}
+
 .logged-out-msg {
     width: 80%;
     position: absolute;

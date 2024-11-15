@@ -3,6 +3,7 @@ const singBtn = document.querySelector('.sing-btn');
 const addBtn = document.querySelector('.add-btn');
 const databaseBtn = document.querySelector('.database-btn');
 const saveBtn = document.querySelector('.save-btn');
+const statusSelect = document.querySelector('.status-select');
 
 const msgAuthBtn = document.querySelector('.call-authorize');
 const loggedOutMsg = document.querySelector('.logged-out-msg');
@@ -27,6 +28,7 @@ saveBtn.addEventListener('click', () =>  {
 });
 
 addBtn.addEventListener('click', () => addItem());
+statusSelect.addEventListener('change', () => changeStatus());
 
 document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
 document.querySelectorAll('.select-almoco').forEach((element) => element.addEventListener('change', () => changeLunch(element)));
@@ -188,6 +190,13 @@ function changeSnack(element) {
 function changeLunch(element) {
     menu[1].splice(element.dataset.day, 1, element.value);
     showSaveBtn('block');
+}
+
+// Change status of app
+function changeStatus() {
+    const status = statusSelect.value;
+    menu[2][1] = status;
+    saveServer('admin!C:C', [menu[2]]);
 }
 
 // Save of menu in google sheets
