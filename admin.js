@@ -227,9 +227,17 @@ async function addItem() {
         `,
         focusConfirm: false,
         preConfirm: () => {
+            const nome = document.getElementById("swal-input1").value.trim();
+            const calorias = document.getElementById("swal-input2").value.trim();
+
+            if (!nome || !calorias) {
+                Swal.showValidationMessage("Os campos 'Nome' e 'Calorias' são obrigatórios.");
+                return false;
+            }
+
             return {
-                nome: document.getElementById("swal-input1").value,
-                calorias: document.getElementById("swal-input2").value,
+                nome,
+                calorias,
                 lactose: document.getElementById("swal-input3").checked,
                 tipo: document.getElementById("select").value
             };
@@ -247,6 +255,7 @@ async function addItem() {
         window.location.reload();
     }
 }
+
 
 // Make a random ID
 function generateUniqueId() {
