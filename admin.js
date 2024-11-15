@@ -20,7 +20,12 @@ let gisInited = false;
 
 let menu = [];
 
-saveBtn.addEventListener('click', () => saveServer('admin!A1:B', [menu[0], menu[1]]));
+saveBtn.addEventListener('click', () =>  {
+    const date = new Date();
+    menu[2][0] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;    
+    saveServer('admin!A1:C', [menu[0], menu[1], menu[2]]);
+});
+
 addBtn.addEventListener('click', () => addItem());
 
 document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
