@@ -1,7 +1,6 @@
 const authBtn = document.querySelector('.auth-btn');
 const singBtn = document.querySelector('.sing-btn');
 const databaseBtn = document.querySelector('.database-btn');
-const saveBtn = document.querySelector('.save-btn');
 const statusSelect = document.querySelector('.status-select');
 
 const msgAuthBtn = document.querySelector('.call-authorize');
@@ -19,12 +18,6 @@ let gapiInited = false;
 let gisInited = false;
 
 let menu = [];
-
-saveBtn.addEventListener('click', () =>  {
-    const date = new Date();
-    menu[2][0] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;    
-    saveServer('admin!A1:C', [menu[0], menu[1], menu[2]]);
-});
 
 statusSelect.addEventListener('change', () => changeStatus());
 
@@ -126,11 +119,6 @@ function loadButtons() {
     }
 }
 
-// Show the button save
-function showSaveBtn(value) {
-    saveBtn.style.display = value;
-}
-
 // Load cards for changing menu
 function loadCards() {
     container.style.display = 'flex';
@@ -181,13 +169,21 @@ function signout() {
 // Change snack
 function changeSnack(element) {    
     menu[0].splice(element.dataset.day, 1, element.value);
-    showSaveBtn('block');
+
+    const date = new Date();
+    menu[2][0] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+    saveServer('admin!A1:C', [menu[0], menu[1], menu[2]]);
 }
 
 // Change lunch
 function changeLunch(element) {
     menu[1].splice(element.dataset.day, 1, element.value);
-    showSaveBtn('block');
+
+    const date = new Date();
+    menu[2][0] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;    
+
+    saveServer('admin!A1:C', [menu[0], menu[1], menu[2]]);
 }
 
 // Change status of app
