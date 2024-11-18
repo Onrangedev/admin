@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <link rel="shortcut icon" href="../assets/settings.svg" type="image/x-icon">
+    <link rel="stylesheet" href="configuracao.css">
+    <title>Cardápio - Configuração</title>
+</head>
+<body>
+    <div class="header">
+        <div class="back-home">
+            <img src="../assets/arrow.svg" alt="Voltar">
+        </div>
+        <h2>Configurações</h2>
+    </div>
+    <div class="menu-configuracoes">
+
+        <!-- Descrição do projeto -->
+        <div class="menu-descricao">
+            <h3>Descrição</h3>
+            <p>Estamos realizando testes em nossa escola com um programa destinado a exibir o cardápio de forma online. ⚠️ Atenção: ainda estamos em fase de desenvolvimento, portanto, podem ocorrer alguns erros. No entanto, estamos atentos e já estamos trabalhando para corrigir e aperfeiçoar o sistema nas próximas atualizações. Agradecemos por participar do teste. Caso tenha alguma sugestão de melhoria, entre em contato conosco através dos links do Instagram disponíveis nos créditos!</p>
+        </div>
+
+        <!-- Alteração de tema -->
+        <div class="menu-tema">
+            <h3>Tema</h3>
+            <select name="theme" class="theme">
+                <option value="auto" selected>Auto</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="full-dark">Full Dark</option>
+            </select>
+        </div>
+
+        <!-- Exibir Frases -->
+        <div class="menu-frases">
+            <p>Exibir frases</p>
+            <label class="switch">
+                <input type="checkbox" class="checkbox-frase">
+                <span class="slider round"></span>
+            </label> 
+        </div>
+
+        <!-- Exibir Imagens -->
+        <div class="menu-imgs">
+            <p>Exibir Imagens</p>
+            <label class="switch">
+                <input type="checkbox" class="checkbox-imgs">
+                <span class="slider round"></span>
+            </label> 
+        </div>
+
+        <!-- Horários do refeitório -->
+        <div class="menu-horario">
+            <h3>Horários do Refeitório</h3>
+            <p>Lanche: 10h às 10h30min</p>
+            <p>Almoço: 12h às 13h</p>
+            <p>Lanche: 15h30min às 16h</p>
+        </div>
+
+        <!-- Exibi quando foi a última alteração no servidor -->
+        <div class="menu-ultima-alteracao">
+            <h3>Última alteração no servidor</h3>
+            <span class="dia-ultima-alteracao">**/**/****</span>
+        </div>
+
+        <!-- Créditos para os envolvidos no projeto -->
+        <div class="menu-creditos">
+            <h3>Créditos</h3>
+            <a target="_blank" href="https://www.instagram.com/onrangedev">Onrangedev</a>
+            <a target="_blank" href="https://www.instagram.com/davi_barbosa3009">Davi Barbosa</a>
+            <a target="_blank" href="https://www.instagram.com/eierickdasilva">Érick da Silva</a>
+            <a target="_blank" href="https://www.instagram.com/gustavolima_sem_o_t">Gustavo Lima</a>
+            <a target="_blank" href="https://www.instagram.com/iagomenezes37">Iago Menezes</a>
+            <a target="_blank" href="https://www.instagram.com/kiammota">Kiam Mota</a>
+        </div>
+
+        <!-- QR code -->
+        <div class="menu-qrcode">
+            <h3>qr code</h3>
+            <img src="../assets/qrcode.png" alt="qr code">
+            <button class="btn-compartilhar btns">Compartilhar</button>
+        </div>
+    </div>
+    <script src="configuracao.js"></script>
+</body>
+</html>
