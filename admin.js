@@ -125,6 +125,12 @@ function loadCards() {
     loggedOutMsg.style.display = 'none';
 }
 
+// hide cards for changing menu
+function hideCards() {
+    container.style.display = 'none';
+    loggedOutMsg.style.display = 'block';
+}
+
 // Sign in the user upon button click and store the token in localStorage
 function auth() {
     tokenClient.callback = async (resp) => {
@@ -161,8 +167,9 @@ function signout() {
 
         singBtn.style.display = 'none';
         databaseBtn.style.display = 'none';
+        authBtn.style.display = 'block';
 
-        location.reload();
+        hideCards();
     }
 }
 
@@ -199,10 +206,7 @@ function saveServer(range, array) {
         gapi.client.sheets.spreadsheets.values.batchUpdate({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             resource: { data: { range: range, values: transpose(array) }, valueInputOption: 'RAW' },
-        }).then(() => {
-            showSaveBtn('none');
-            alert('Cardápio alterado com sucesso!');
-        });
+        }).then();
     } catch (err) {
         console.error(err.message);
     }
