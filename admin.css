@@ -55,6 +55,7 @@ body {
     padding: 20px;
     width: 200px;
     border-radius: 10px;
+    border: 1px solid var(--border-color);
 }
 
 .meal {
