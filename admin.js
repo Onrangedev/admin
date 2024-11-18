@@ -1,6 +1,5 @@
 const authBtn = document.querySelector('.auth-btn');
 const singBtn = document.querySelector('.sing-btn');
-const addBtn = document.querySelector('.add-btn');
 const databaseBtn = document.querySelector('.database-btn');
 const saveBtn = document.querySelector('.save-btn');
 const statusSelect = document.querySelector('.status-select');
@@ -27,7 +26,6 @@ saveBtn.addEventListener('click', () =>  {
     saveServer('admin!A1:C', [menu[0], menu[1], menu[2]]);
 });
 
-addBtn.addEventListener('click', () => addItem());
 statusSelect.addEventListener('change', () => changeStatus());
 
 document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
@@ -217,61 +215,4 @@ function saveServer(range, array) {
 // Função para transpor (convert rows to columns)
 function transpose(matrix) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
-}
-
-// Load a dialog to add a new item to the server
-async function addItem() {
-    const { value: formValues } = await Swal.fire({
-        title: "Adicionar",
-        html: `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
-                <select class="select" id="select">
-                    <option value="merenda" selected>Merenda</option>
-                    <option value="almoco">Almoço</option>
-                </select>
-                <label for="swal-input1">Nome</label>
-                <input type="text" id="swal-input1" class="inp">
-                <label for="swal-input2">Calorias</label>
-                <input type="number" id="swal-input2" class="inp">
-                <div style="display: flex; width: 100%; justify-content: center;">
-                    <label for="swal-input3">Lactose</label>
-                    <input type="checkbox" id="swal-input3" class="inp" style="width: 20px">
-                </div>
-            </div>
-        `,
-        focusConfirm: false,
-        preConfirm: () => {
-            const nome = document.getElementById("swal-input1").value.trim();
-            const calorias = document.getElementById("swal-input2").value.trim();
-
-            if (!nome || !calorias) {
-                Swal.showValidationMessage("Os campos 'Nome' e 'Calorias' são obrigatórios.");
-                return false;
-            }
-
-            return {
-                nome,
-                calorias,
-                lactose: document.getElementById("swal-input3").checked,
-                tipo: document.getElementById("select").value
-            };
-        }
-    });
-
-    if (formValues) {
-        const { nome, calorias, lactose, tipo } = formValues;
-        const itemData = `${nome}/${generateUniqueId()}/${calorias}/${lactose}`;
-        const menuIndex = tipo === 'merenda' ? 3 : 4;
-        const range = tipo === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
-
-        menu[menuIndex].push(itemData);
-        saveServer(range, [menu[menuIndex]]);
-        window.location.reload();
-    }
-}
-
-
-// Make a random ID
-function generateUniqueId() {
-    return Math.floor(Date.now() * Math.random()).toString(36);
 }

@@ -1,6 +1,7 @@
 const saveBtn = document.querySelector('.save-btn');
 const select = document.querySelector('.select');
 const section = document.querySelector('.itens');
+const addBtn = document.querySelector('.add-item-btn');
 
 const CLIENT_ID = '293531894729-htvn6ikdidqnbt83stj818k8mmh2u3ov.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyAEOb_1iv4NXFeV7OQph2FW5UpqCUiGMcc';
@@ -14,6 +15,7 @@ let gisInited = false;
 let menu;
 
 select.addEventListener('change', () => loadCards(select.value));
+addBtn.addEventListener('click', () => addItem());
 
 // Callback after api.js is loaded.
 function gapiLoaded() {
@@ -46,7 +48,6 @@ function gisLoaded() {
 
 // try to authenticate from localstorage
 function getAuth() {
-    console.log(gisInited, gapiInited);
     if (gapiInited && gisInited) {
         const storedToken = localStorage.getItem('access_token');
         if (storedToken) gapi.client.setToken({ access_token: storedToken });
@@ -169,8 +170,6 @@ function deleteItem(databaseIndex, itemIndex) {
 
     if (confirmation) {
         menu[databaseIndex].splice(itemIndex, 1);
-
-        console.log(menu);
         
         const snack = clearArray(menu[0]);
         const lunch = clearArray(menu[1]);
@@ -183,6 +182,62 @@ function deleteItem(databaseIndex, itemIndex) {
 
         loadCards(databaseIndex);
     }
+}
+
+// Load a dialog to add a new item to the server
+async function addItem() {
+    const { value: formValues } = await Swal.fire({
+        title: "Adicionar",
+        html: `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+                <select class="select select-type" id="select">
+                    <option value="merenda" selected>Merenda</option>
+                    <option value="almoco">Almoço</option>
+                </select>
+                <label for="swal-input1">Nome</label>
+                <input type="text" id="swal-input1" class="inp">
+                <label for="swal-input2">Calorias</label>
+                <input type="number" id="swal-input2" class="inp">
+                <div style="display: flex; width: 100%; justify-content: center;">
+                    <label for="swal-input3">Lactose</label>
+                    <input type="checkbox" id="swal-input3" class="inp" style="width: 20px">
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        preConfirm: () => {
+            const name = document.getElementById("swal-input1").value.trim();
+            const calories = document.getElementById("swal-input2").value.trim();
+
+            if (!name || !calories) {
+                Swal.showValidationMessage("Os campos 'Nome' e 'Calorias' são obrigatórios.");
+                return false;
+            }
+
+            return {
+                name,
+                calories,
+                lactose: document.getElementById("swal-input3").checked,
+                type: document.querySelector(".select-type").value
+            };
+        }
+    });
+
+    if (formValues) {
+        const { name, calories, lactose, type } = formValues;
+        const itemData = `${name}/${generateUniqueId()}/${calories}/${lactose}`;
+        const menuIndex = type === 'merenda' ? 0 : 1;
+        const range = type === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
+
+        menu[menuIndex].push(itemData);
+        postData(range, [menu[menuIndex]]);
+        window.location.reload();
+    }
+}
+
+// Make a random ID
+function generateUniqueId() {
+    return Math.floor(Date.now() * Math.random()).toString(36);
 }
 
 // Clear arrays

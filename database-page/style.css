@@ -56,6 +56,13 @@ main div .delete {
     align-items: center;
 }
 
+main .add-item-btn {
+    position: absolute;
+    font-size: 24px;
+    right: 10px;
+    bottom: 10px;
+}
+
 @media (max-width: 800px) {
     main section {
         width: 100%;
