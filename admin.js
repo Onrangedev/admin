@@ -216,3 +216,26 @@ function saveServer(range, array) {
 function transpose(matrix) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
 }
+
+document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = '../configuracao/index.html');
+
+// Temas
+const savedTheme = localStorage.getItem('cardapio-theme');
+
+if (savedTheme) {
+    if (savedTheme === 'auto') {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.add('light');
+        }
+    } else {
+        document.documentElement.classList.add(savedTheme);
+    }
+} else {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.add('light');
+    }
+}
