@@ -219,7 +219,7 @@ function transpose(matrix) {
 
 document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = './configuracao/index.html');
 
-// Temas
+// Themes
 const savedTheme = localStorage.getItem('cardapio-theme');
 
 if (savedTheme) {
@@ -239,3 +239,11 @@ if (savedTheme) {
         document.documentElement.classList.add('light');
     }
 }
+
+// Animation
+window.addEventListener('load', function() {
+    const loadingScreen = document.querySelector('.loading-screen');
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+    }, 1000);
+  });
