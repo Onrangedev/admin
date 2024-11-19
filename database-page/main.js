@@ -103,24 +103,31 @@ function transpose(matrix) {
 function loadCards(type) {
     section.innerHTML = '';
 
+    let items = [];
+
     if (type === 'merenda' || type === 0) {
-        menu[0].forEach(item => {
-            if (item != undefined && item !== '') {
-                const name = item.split('/')[0];
-                const id = item.split('/')[1];
-                section.appendChild(elementItem(name, id));
-            }
-        });
+        items = menu[0];
     } else if (type === 'almoco' || type === 1) {
-        menu[1].forEach(item => {
-            if (item != undefined && item !== '') {
-                const name = item.split('/')[0];
-                const id = item.split('/')[1];
-                section.appendChild(elementItem(name, id));
-            }
-        });
+        items = menu[1];
     }
+
+    // Ordena os itens em ordem alfabética (primeiro por nome)
+    items.sort((a, b) => {
+        const nameA = a.split('/')[0].toLowerCase();
+        const nameB = b.split('/')[0].toLowerCase();
+        return nameA.localeCompare(nameB);
+    });
+
+    // Renderiza os itens
+    items.forEach(item => {
+        if (item != undefined && item !== '') {
+            const name = item.split('/')[0];
+            const id = item.split('/')[1];
+            section.appendChild(elementItem(name, id));
+        }
+    });
 }
+
 
 // Make a container for the manager a data in server
 function elementItem(text, id) {    
@@ -164,6 +171,7 @@ function locateItemIndex(id) {
 }
 
 // Delete item with index from local database and server
+// Delete item with index from local database and server
 function deleteItem(databaseIndex, itemIndex) {
     const name = menu[databaseIndex][itemIndex].split('/')[0];
     const confirmation = window.confirm(`Você realmente deseja APAGAR o item '${name}'`);
@@ -171,19 +179,28 @@ function deleteItem(databaseIndex, itemIndex) {
     if (confirmation) {
         menu[databaseIndex].splice(itemIndex, 1);
         
+        // Ordena os itens após a exclusão
+        menu[databaseIndex].sort((a, b) => {
+            const nameA = a.split('/')[0].toLowerCase();
+            const nameB = b.split('/')[0].toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
         const snack = clearArray(menu[0]);
         const lunch = clearArray(menu[1]);
-        const data = [snack, lunch]
+        const data = [snack, lunch];
         
         postData('admin!D:E', data);
 
-        deleteData("D", snack.length+1);
-        deleteData("E", lunch.length+1);
+        deleteData("D", snack.length + 1);
+        deleteData("E", lunch.length + 1);
 
         loadCards(databaseIndex);
     }
 }
 
+
+// Load a dialog to add a new item to the server
 // Load a dialog to add a new item to the server
 async function addItem() {
     const { value: formValues } = await Swal.fire({
@@ -230,10 +247,19 @@ async function addItem() {
         const range = type === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
 
         menu[menuIndex].push(itemData);
+
+        // Ordena os itens antes de salvar
+        menu[menuIndex].sort((a, b) => {
+            const nameA = a.split('/')[0].toLowerCase();
+            const nameB = b.split('/')[0].toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
         postData(range, [menu[menuIndex]]);
         window.location.reload();
     }
 }
+
 
 // Make a random ID
 function generateUniqueId() {
