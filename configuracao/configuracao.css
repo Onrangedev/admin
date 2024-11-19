@@ -28,7 +28,7 @@ h2 {
     color: #fff;
 }
 
-.menu-configuracoes, .menu-descricao, .menu-horario, .menu-qrcode, .menu-creditos, .menu-tema, .menu-ultima-alteracao {
+.menu-configuracoes, .menu-descricao, .menu-horario, .menu-qrcode, .menu-creditos, .menu-tema{
     display: flex;
     flex-direction: column;
     justify-content: center;
