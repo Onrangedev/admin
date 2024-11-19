@@ -98,3 +98,14 @@ div.botao-configuracao {
 div.botao-configuracao:hover, div.botao-configuracao:active {
     background-color: transparent;
 }
+
+@media (max-width: 780px){
+    .header .botao-container {
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+        flex-grow: 1;
+        align-items: center;
+        width: 2px;
+    }
+}
