@@ -10,9 +10,6 @@
 
 const themeSelect = document.querySelector('.theme');
 const savedTheme = localStorage.getItem('cardapio-theme');
-const cardapioImgs = localStorage.getItem('cardapio-imgs-toggle');
-const ultimaAlteracao = localStorage.getItem('cardapio-ultima-alteracao');
-const savedFrases = localStorage.getItem('cardapio-frase');
 
 // Pega os dados salvos em local storage e carrega o tema
 if (savedTheme) {
@@ -32,17 +29,6 @@ if (savedTheme) {
     } else {
         document.documentElement.classList.add('light');
     }
-}
-
-if (savedFrases) {
-    document.querySelector('.checkbox-frase').savedFrases;
-}
-
-document.querySelector('.menu-ultima-alteracao').style.display = 'none';
-
-if (ultimaAlteracao) {
-    document.querySelector('.menu-ultima-alteracao').style.display = 'block';
-    document.querySelector('.dia-ultima-alteracao').textContent = ultimaAlteracao;
 }
 
 // Aguarda mudança no switch para alterar o tema
