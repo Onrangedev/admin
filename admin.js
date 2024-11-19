@@ -217,7 +217,7 @@ function transpose(matrix) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
 }
 
-document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = '../configuracao/index.html');
+document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = './configuracao/index.html');
 
 // Temas
 const savedTheme = localStorage.getItem('cardapio-theme');
