@@ -99,17 +99,6 @@ div.botao-configuracao:hover, div.botao-configuracao:active {
     background-color: transparent;
 }
 
-@media (max-width: 780px){
-    .header .botao-container {
-        display: flex;
-        justify-content: center;
-        gap: 2px;
-        flex-grow: 1;
-        align-items: center;
-        width: 2px;
-    }
-}
-
 .loading-screen {
     position: fixed;
     top: 0;
@@ -184,4 +173,20 @@ div.botao-configuracao:hover, div.botao-configuracao:active {
     height: 100%;
     background-color: #ff6600; 
     border-radius: 50px;
+}
+
+@media (max-width: 780px){
+    .header .botao-container {
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+        flex-grow: 1;
+        align-items: center;
+        width: 2px;
+    }
+
+    .status-select {
+        background-color: #ffffff77;
+        width: 35%;
+    }
 }
