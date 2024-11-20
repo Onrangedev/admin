@@ -291,3 +291,95 @@ if (savedTheme) {
         document.documentElement.classList.add('light');
     }
 }
+
+//edit
+function elementItem(text, id) {    
+    const div = document.createElement('div');
+    const name = document.createElement('span');
+    const deleteBtn = document.createElement('span');
+    
+    name.classList.add('name');
+    deleteBtn.classList.add('delete');
+
+    div.dataset.id = id;
+
+    name.textContent = text;
+    deleteBtn.textContent = 'x';
+
+    const [databaseIndex, itemIndex] = locateItemIndex(div.dataset.id);
+    
+    deleteBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        deleteItem(databaseIndex, itemIndex);
+    });
+
+    div.appendChild(name);
+    div.appendChild(deleteBtn);
+
+    div.addEventListener('click', () => {
+        editItem(databaseIndex, itemIndex);
+    });
+
+    return div;
+}
+
+
+async function editItem(databaseIndex, itemIndex) {
+    const item = menu[databaseIndex][itemIndex].split('/'); 
+    const name = item[0];
+    const id = item[1];
+    const calories = item[2];
+    const lactose = item[3] === 'true'; 
+
+    const { value: formValues } = await Swal.fire({
+        title: "Editar Item",
+        html: `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+                <label for="swal-input1">Nome</label>
+                <input type="text" id="swal-input1" class="inp" value="${name}">
+                <label for="swal-input2">Calorias</label>
+                <input type="number" id="swal-input2" class="inp" value="${calories}">
+                <div style="display: flex; width: 100%; justify-content: center;">
+                    <label for="swal-input3">Lactose</label>
+                    <input type="checkbox" id="swal-input3" class="inp" style="width: 20px" ${lactose ? 'checked' : ''}>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        preConfirm: () => {
+            const name = document.getElementById("swal-input1").value.trim();
+            const calories = document.getElementById("swal-input2").value.trim();
+
+            if (!name || !calories) {
+                Swal.showValidationMessage("Os campos 'Nome' e 'Calorias' são obrigatórios.");
+                return false;
+            }
+
+            return {
+                name,
+                calories,
+                lactose: document.getElementById("swal-input3").checked
+            };
+        }
+    });
+
+    if (formValues) {
+        const { name, calories, lactose } = formValues;
+
+        menu[databaseIndex][itemIndex] = `${name}/${id}/${calories}/${lactose}`;
+
+        menu[databaseIndex].sort((a, b) => {
+            const nameA = a.split('/')[0].toLowerCase();
+            const nameB = b.split('/')[0].toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
+        const snack = clearArray(menu[0]);
+        const lunch = clearArray(menu[1]);
+        const data = [snack, lunch];
+        
+        postData('admin!D:E', data);
+
+        loadCards(databaseIndex);
+    }
+}
