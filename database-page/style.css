@@ -49,6 +49,11 @@ main div {
     border-radius: 8px;
 }
 
+main div:hover {
+    transform: scale3d(1.03);
+    box-shadow:  0 0 10px #ff6600;
+}
+
 main div .delete {
     cursor: pointer;
     display: flex;
