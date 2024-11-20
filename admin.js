@@ -251,6 +251,30 @@ window.addEventListener('load', () => {
 if (!sessionStorage.getItem('animationShown')) {
     window.addEventListener('load', () => {
         const loadingScreen = document.querySelector('.loading-screen');
+        const loadingBar = document.querySelector('.loading-bar');
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 1;
+            loadingBar.style.width = progress + '%';
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    sessionStorage.setItem('animationShown', 'true');
+                }, 500); 
+            }
+        }, 5);  
+    });
+} else {
+    const loadingScreen = document.querySelector('.loading-screen');
+    loadingScreen.style.display = 'none';
+}
+
+if (!sessionStorage.getItem('animationShown')) {
+    window.addEventListener('load', () => {
+        const loadingScreen = document.querySelector('.loading-screen');
         setTimeout(() => {
             loadingScreen.style.display = 'none';
             sessionStorage.setItem('animationShown', 'true');
