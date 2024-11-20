@@ -1,51 +1,35 @@
-// if ('serviceWorker' in navigator) {
-//     window.addEventListener('load', () => {
-//         navigator.serviceWorker.register('/cardapio/alunos/pwabuilder-sw.js').then((registration) => {
-//             console.log('Service Worker registrado com sucesso:', registration);
-//         }).catch((error) => {
-//             console.log('Falha ao registrar o Service Worker:', error);
-//         });
-//     });
-// }
-
 const themeSelect = document.querySelector('.theme');
+
 const savedTheme = localStorage.getItem('cardapio-theme');
 
-// Pega os dados salvos em local storage e carrega o tema
+// Load theme
 if (savedTheme) {
     themeSelect.value = savedTheme;
-    if (savedTheme === 'auto') {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.add('light');
-        }
-    } else {
-        document.documentElement.classList.add(savedTheme);
-    }
+    const theme = savedTheme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : savedTheme;
+    applyTheme(theme);
 } else {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.add('light');
-    }
+    const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    applyTheme(defaultTheme);
 }
 
-// Aguarda mudança no switch para alterar o tema
+// Apply theme
+function applyTheme(theme) {
+    document.documentElement.classList.add(theme);
+};
+
+// Wait for change to change theme
 themeSelect.addEventListener('change', () => {
     localStorage.setItem('cardapio-theme', themeSelect.value);
     location.reload();
 });
 
-// Aguarda evento de clique no botão de voltar para voltar a pagina inicial
+// Wait for click on back button to return to home
 document.querySelector('.back-home').addEventListener('click', (e) => {
     window.location.href = '../index.html';
-    if (e.persisted) {
-        window.location.reload();
-    }
+    if (e.persisted) window.location.reload();
 });
 
-// Aguarda evento de clique no botão de compartilhar para abrir o menu de compartilhamento ou copiar o link do site
+// Wait for click on share button to open share menu or copy website link
 document.querySelector('.btn-compartilhar').addEventListener('click', async (e) => {
     try {
         await navigator.share({
@@ -56,13 +40,6 @@ document.querySelector('.btn-compartilhar').addEventListener('click', async (e) 
     } catch (err) {
         navigator.clipboard.writeText('https://eierick.github.io/cardapio/alunos/');
         e.target.innerText = 'Link Copiado!';
-        setTimeout(() => {
-            e.target.innerText = 'Compartilhar';
-        }, 2000);
+        setTimeout(() => e.target.innerText = 'Compartilhar', 2000);
     }
 });
-
-// Exibi o valor de zoom no elemento '.valor-escala'
-function exibirZoom(valor) {
-    document.querySelector('.valor-escala').textContent = parseInt(valor*100);
-}
