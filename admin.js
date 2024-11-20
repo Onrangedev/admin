@@ -247,3 +247,16 @@ window.addEventListener('load', () => {
     const loadingScreen = document.querySelector('.loading-screen');
     setTimeout(() => loadingScreen.style.display = 'none', 1000);
 });
+
+if (!sessionStorage.getItem('animationShown')) {
+    window.addEventListener('load', () => {
+        const loadingScreen = document.querySelector('.loading-screen');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            sessionStorage.setItem('animationShown', 'true');
+        }, 1000);
+    });
+} else {
+    const loadingScreen = document.querySelector('.loading-screen');
+    loadingScreen.style.display = 'none';
+}
