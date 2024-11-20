@@ -21,8 +21,11 @@ let menu = [];
 
 statusSelect.addEventListener('change', () => changeStatus());
 
+document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = './configuracao/index.html');
 document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
 document.querySelectorAll('.select-almoco').forEach((element) => element.addEventListener('change', () => changeLunch(element)));
+
+loadTheme();
 
 // Callback after api.js is loaded.
 function gapiLoaded() {
@@ -212,38 +215,35 @@ function saveServer(range, array) {
     }
 }
 
-// Função para transpor (convert rows to columns)
+// Function for transpose (convert rows to columns)
 function transpose(matrix) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
 }
 
-document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = './configuracao/index.html');
-
-// Themes
-const savedTheme = localStorage.getItem('cardapio-theme');
-
-if (savedTheme) {
-    if (savedTheme === 'auto') {
+// Load theme
+function loadTheme() {
+    const savedTheme = localStorage.getItem('cardapio-theme');
+    if (savedTheme) {
+        if (savedTheme === 'auto') {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.add('light');
+            }
+        } else {
+            document.documentElement.classList.add(savedTheme);
+        }
+    } else {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.add('light');
         }
-    } else {
-        document.documentElement.classList.add(savedTheme);
-    }
-} else {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.add('light');
     }
 }
 
-// Animation
-window.addEventListener('load', function() {
+// Load animation
+window.addEventListener('load', () => {
     const loadingScreen = document.querySelector('.loading-screen');
-    setTimeout(() => {
-      loadingScreen.style.display = 'none';
-    }, 1000);
-  });
+    setTimeout(() => loadingScreen.style.display = 'none', 1000);
+});
