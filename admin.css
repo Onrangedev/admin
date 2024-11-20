@@ -119,15 +119,6 @@ div.botao-configuracao:hover, div.botao-configuracao:active {
     position: relative;
     animation: slideUp 3s ease-out forwards;
   }
-  
-  @keyframes slideUp {
-    0% {
-      transform: translateY(100vh);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
 
   .loading-screen {
     position: fixed;
@@ -149,15 +140,6 @@ div.botao-configuracao:hover, div.botao-configuracao:active {
     font-weight: bold;
     position: relative;
     animation: slideUp 3s ease-out forwards;
-}
-
-@keyframes slideUp {
-    0% {
-        transform: translateY(100vh);
-    }
-    100% {
-        transform: translateY(0);
-    }
 }
 
 .loading-bar-container {
