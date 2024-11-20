@@ -325,7 +325,7 @@ function elementItem(text, id) {
 
 
 async function editItem(databaseIndex, itemIndex) {
-    const item = menu[databaseIndex][itemIndex].split('/'); 
+    const item = menu[databaseIndex][itemIndex].split('/');
     const name = item[0];
     const id = item[1];
     const calories = item[2];
