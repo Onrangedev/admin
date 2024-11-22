@@ -107,11 +107,8 @@ function loadCards(type) {
 
     let items = [];
 
-    if (type === 'merenda' || type === 0) {
-        items = menu[0];
-    } else if (type === 'almoco' || type === 1) {
-        items = menu[1];
-    }
+    if (type === 'merenda' || type === 0) items = menu[0];
+    else if (type === 'almoco' || type === 1) items = menu[1]
 
     // Ordena os itens em ordem alfabética (primeiro por nome)
     items.sort((a, b) => {
@@ -128,31 +125,6 @@ function loadCards(type) {
             section.appendChild(elementItem(name, id));
         }
     });
-}
-
-
-// Make a container for the manager a data in server
-function elementItem(text, id) {    
-    const div = document.createElement('div');
-    const name = document.createElement('span');
-    const deleteBtn = document.createElement('span');
-
-    name.classList.add('name');
-    deleteBtn.classList.add('delete');
-
-    div.dataset.id = id;
-
-    name.textContent = text;
-    deleteBtn.textContent = 'x';
-
-    const [databaseIndex, itemIndex] = locateItemIndex(div.dataset.id);
-    
-    deleteBtn.addEventListener('click', () => deleteItem(databaseIndex, itemIndex));
-
-    div.appendChild(name);
-    div.appendChild(deleteBtn);
-
-    return div;
 }
 
 // locate a item with id
@@ -172,7 +144,7 @@ function locateItemIndex(id) {
     return [databaseIndex, itemIndex];
 }
 
-// Delete item with index from local database and server
+
 // Delete item with index from local database and server
 function deleteItem(databaseIndex, itemIndex) {
     const name = menu[databaseIndex][itemIndex].split('/')[0];
@@ -181,7 +153,6 @@ function deleteItem(databaseIndex, itemIndex) {
     if (confirmation) {
         menu[databaseIndex].splice(itemIndex, 1);
         
-        // Ordena os itens após a exclusão
         menu[databaseIndex].sort((a, b) => {
             const nameA = a.split('/')[0].toLowerCase();
             const nameB = b.split('/')[0].toLowerCase();
@@ -201,8 +172,6 @@ function deleteItem(databaseIndex, itemIndex) {
     }
 }
 
-
-// Load a dialog to add a new item to the server
 // Load a dialog to add a new item to the server
 async function addItem() {
     const { value: formValues } = await Swal.fire({
@@ -262,7 +231,6 @@ async function addItem() {
     }
 }
 
-
 // Make a random ID
 function generateUniqueId() {
     return Math.floor(Date.now() * Math.random()).toString(36);
@@ -286,7 +254,7 @@ function loadTheme() {
     }
 }
 
-//edit
+// Make a container for the manager a data in server
 function elementItem(text, id) {    
     const div = document.createElement('div');
     const name = document.createElement('span');
@@ -316,7 +284,6 @@ function elementItem(text, id) {
 
     return div;
 }
-
 
 async function editItem(databaseIndex, itemIndex) {
     const item = menu[databaseIndex][itemIndex].split('/');
