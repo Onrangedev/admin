@@ -223,22 +223,13 @@ function transpose(matrix) {
 // Load theme
 function loadTheme() {
     const savedTheme = localStorage.getItem('cardapio-theme');
+
     if (savedTheme) {
-        if (savedTheme === 'auto') {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.add('light');
-            }
-        } else {
-            document.documentElement.classList.add(savedTheme);
-        }
+        const theme = savedTheme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : savedTheme;
+        document.documentElement.classList.add(theme);
     } else {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.add('light');
-        }
+        const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.classList.add(defaultTheme);
     }
 }
 

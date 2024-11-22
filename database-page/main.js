@@ -17,6 +17,8 @@ let menu;
 select.addEventListener('change', () => loadCards(select.value));
 addBtn.addEventListener('click', () => addItem());
 
+loadTheme();
+
 // Callback after api.js is loaded.
 function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
@@ -271,24 +273,16 @@ function clearArray(array) {
     return array.filter(elemento => elemento !== undefined && elemento !== '');
 }
 
-// Temas
-const savedTheme = localStorage.getItem('cardapio-theme');
+// Load theme
+function loadTheme() {
+    const savedTheme = localStorage.getItem('cardapio-theme');
 
-if (savedTheme) {
-    if (savedTheme === 'auto') {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.add('light');
-        }
+    if (savedTheme) {
+        const theme = savedTheme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : savedTheme;
+        document.documentElement.classList.add(theme);
     } else {
-        document.documentElement.classList.add(savedTheme);
-    }
-} else {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.add('light');
+        const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.classList.add(defaultTheme);
     }
 }
 

@@ -2,20 +2,21 @@ const themeSelect = document.querySelector('.theme');
 
 const savedTheme = localStorage.getItem('cardapio-theme');
 
-// Load theme
-if (savedTheme) {
-    themeSelect.value = savedTheme;
-    const theme = savedTheme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : savedTheme;
-    applyTheme(theme);
-} else {
-    const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    applyTheme(defaultTheme);
-}
+loadTheme();
 
-// Apply theme
-function applyTheme(theme) {
-    document.documentElement.classList.add(theme);
-};
+// Load theme
+function loadTheme() {
+    const savedTheme = localStorage.getItem('cardapio-theme');
+
+    if (savedTheme) {
+        themeSelect.value = savedTheme;
+        const theme = savedTheme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : savedTheme;
+        document.documentElement.classList.add(theme);
+    } else {
+        const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.classList.add(defaultTheme);
+    }
+}
 
 // Wait for change to change theme
 themeSelect.addEventListener('change', () => {
