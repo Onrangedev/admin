@@ -15,7 +15,10 @@ let gisInited = false;
 let menu;
 
 select.addEventListener('change', () => loadCards(select.value));
-addBtn.addEventListener('click', () => addItem());
+addBtn.addEventListener('click', () => {
+    databaseIndex = select.value === 'merenda' ? 0 : 1;
+    manageItem('add', databaseIndex);
+});
 
 loadTheme();
 
@@ -106,9 +109,10 @@ function loadCards(type) {
     section.innerHTML = '';
 
     let items = [];
+    sortMenu();
 
     if (type === 'merenda' || type === 0) items = menu[0];
-    else if (type === 'almoco' || type === 1) items = menu[1]
+    else if (type === 'almoco' || type === 1) items = menu[1];
 
     items.forEach(item => {
         if (item != undefined && item !== '') {
@@ -159,23 +163,39 @@ function deleteItem(databaseIndex, itemIndex) {
     }
 }
 
-// Load a dialog to add a new item to the server
-async function addItem() {
+// Load a dialog to add and edit item to the server
+async function manageItem(action, databaseIndex, itemIndex) {
+    const isEdit = action === 'edit';
+
+    let initialValues = {
+        title: isEdit ? "Editar Item" : "Adicionar",
+        name: "",
+        calories: "",
+        lactose: false,
+        type: databaseIndex === 0 ? "merenda" : "almoco"
+    };
+
+    if (isEdit) {
+        const item = menu[databaseIndex][itemIndex].split('/');
+        initialValues = {
+            ...initialValues,
+            name: item[0],
+            calories: item[2],
+            lactose: item[3] === 'true',
+        };
+    }
+
     const { value: formValues } = await Swal.fire({
-        title: "Adicionar",
+        title: initialValues.title,
         html: `
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
-                <select class="select select-type" id="select">
-                    <option value="merenda" selected>Merenda</option>
-                    <option value="almoco">Almoço</option>
-                </select>
                 <label for="swal-input1">Nome</label>
-                <input type="text" id="swal-input1" class="inp">
+                <input type="text" id="swal-input1" class="inp" value="${initialValues.name}">
                 <label for="swal-input2">Calorias</label>
-                <input type="number" id="swal-input2" class="inp">
+                <input type="number" id="swal-input2" class="inp" value="${initialValues.calories}">
                 <div style="display: flex; width: 100%; justify-content: center;">
                     <label for="swal-input3">Lactose</label>
-                    <input type="checkbox" id="swal-input3" class="inp" style="width: 20px">
+                    <input type="checkbox" id="swal-input3" class="inp" style="width: 20px" ${initialValues.lactose ? 'checked' : ''}>
                 </div>
             </div>
         `,
@@ -193,22 +213,33 @@ async function addItem() {
                 name,
                 calories,
                 lactose: document.getElementById("swal-input3").checked,
-                type: document.querySelector(".select-type").value
+                type: document.querySelector(".select-type")?.value || initialValues.type
             };
         }
     });
 
     if (formValues) {
         const { name, calories, lactose, type } = formValues;
-        const itemData = `${name}/${generateUniqueId()}/${calories}/${lactose}`;
-        const menuIndex = type === 'merenda' ? 0 : 1;
-        const range = type === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
 
-        menu[menuIndex].push(itemData);
-        sortMenu();
+        if (isEdit) {
+            const item = menu[databaseIndex][itemIndex].split('/');
+            menu[databaseIndex][itemIndex] = `${name}/${item[1]}/${calories}/${lactose}`;
 
-        postData(range, [menu[menuIndex]]);
-        window.location.reload();
+            const snack = clearArray(menu[0]);
+            const lunch = clearArray(menu[1]);
+            sortMenu();
+            postData('admin!D:E', [snack, lunch]);
+            loadCards(databaseIndex);
+        } else {
+            const itemData = `${name}/${generateUniqueId()}/${calories}/${lactose}`;
+            const menuIndex = type === 'merenda' ? 0 : 1;
+            const range = type === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
+
+            menu[menuIndex].push(itemData);
+            sortMenu();
+            postData(range, [menu[menuIndex]]);
+            window.location.reload();
+        }
     }
 }
 
@@ -258,64 +289,10 @@ function elementItem(text, id) {
 
     div.appendChild(name);
     div.appendChild(deleteBtn);
-    
-    div.addEventListener('click', () => editItem(databaseIndex, itemIndex));
+
+    div.addEventListener('click', () => manageItem('edit', databaseIndex, itemIndex));
 
     return div;
-}
-
-async function editItem(databaseIndex, itemIndex) {
-    const item = menu[databaseIndex][itemIndex].split('/');
-    const name = item[0];
-    const id = item[1];
-    const calories = item[2];
-    const lactose = item[3] === 'true'; 
-
-    const { value: formValues } = await Swal.fire({
-        title: "Editar Item",
-        html: `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
-                <label for="swal-input1">Nome</label>
-                <input type="text" id="swal-input1" class="inp" value="${name}">
-                <label for="swal-input2">Calorias</label>
-                <input type="number" id="swal-input2" class="inp" value="${calories}">
-                <div style="display: flex; width: 100%; justify-content: center;">
-                    <label for="swal-input3">Lactose</label>
-                    <input type="checkbox" id="swal-input3" class="inp" style="width: 20px" ${lactose ? 'checked' : ''}>
-                </div>
-            </div>
-        `,
-        focusConfirm: false,
-        preConfirm: () => {
-            const name = document.getElementById("swal-input1").value.trim();
-            const calories = document.getElementById("swal-input2").value.trim();
-
-            if (!name || !calories) {
-                Swal.showValidationMessage("Os campos 'Nome' e 'Calorias' são obrigatórios.");
-                return false;
-            }
-
-            return {
-                name,
-                calories,
-                lactose: document.getElementById("swal-input3").checked
-            };
-        }
-    });
-
-    if (formValues) {
-        const { name, calories, lactose } = formValues;
-
-        menu[databaseIndex][itemIndex] = `${name}/${id}/${calories}/${lactose}`;
-        sortMenu();
-
-        const snack = clearArray(menu[0]);
-        const lunch = clearArray(menu[1]);
-        const data = [snack, lunch];
-        
-        postData('admin!D:E', data);
-        loadCards(databaseIndex);
-    }
 }
 
 function sortMenu() {
