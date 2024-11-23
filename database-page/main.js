@@ -110,14 +110,6 @@ function loadCards(type) {
     if (type === 'merenda' || type === 0) items = menu[0];
     else if (type === 'almoco' || type === 1) items = menu[1]
 
-    // Ordena os itens em ordem alfabética (primeiro por nome)
-    items.sort((a, b) => {
-        const nameA = a.split('/')[0].toLowerCase();
-        const nameB = b.split('/')[0].toLowerCase();
-        return nameA.localeCompare(nameB);
-    });
-
-    // Renderiza os itens
     items.forEach(item => {
         if (item != undefined && item !== '') {
             const name = item.split('/')[0];
@@ -152,12 +144,7 @@ function deleteItem(databaseIndex, itemIndex) {
 
     if (confirmation) {
         menu[databaseIndex].splice(itemIndex, 1);
-        
-        menu[databaseIndex].sort((a, b) => {
-            const nameA = a.split('/')[0].toLowerCase();
-            const nameB = b.split('/')[0].toLowerCase();
-            return nameA.localeCompare(nameB);
-        });
+        sortMenu();
 
         const snack = clearArray(menu[0]);
         const lunch = clearArray(menu[1]);
@@ -218,13 +205,7 @@ async function addItem() {
         const range = type === 'merenda' ? 'admin!D1:E' : 'admin!E1:F';
 
         menu[menuIndex].push(itemData);
-
-        // Ordena os itens antes de salvar
-        menu[menuIndex].sort((a, b) => {
-            const nameA = a.split('/')[0].toLowerCase();
-            const nameB = b.split('/')[0].toLowerCase();
-            return nameA.localeCompare(nameB);
-        });
+        sortMenu();
 
         postData(range, [menu[menuIndex]]);
         window.location.reload();
@@ -277,10 +258,8 @@ function elementItem(text, id) {
 
     div.appendChild(name);
     div.appendChild(deleteBtn);
-
-    div.addEventListener('click', () => {
-        editItem(databaseIndex, itemIndex);
-    });
+    
+    div.addEventListener('click', () => editItem(databaseIndex, itemIndex));
 
     return div;
 }
@@ -328,19 +307,23 @@ async function editItem(databaseIndex, itemIndex) {
         const { name, calories, lactose } = formValues;
 
         menu[databaseIndex][itemIndex] = `${name}/${id}/${calories}/${lactose}`;
-
-        menu[databaseIndex].sort((a, b) => {
-            const nameA = a.split('/')[0].toLowerCase();
-            const nameB = b.split('/')[0].toLowerCase();
-            return nameA.localeCompare(nameB);
-        });
+        sortMenu();
 
         const snack = clearArray(menu[0]);
         const lunch = clearArray(menu[1]);
         const data = [snack, lunch];
         
         postData('admin!D:E', data);
-
         loadCards(databaseIndex);
     }
+}
+
+function sortMenu() {
+    menu.forEach((item) => {
+        item.sort((a, b) => {
+            const nameA = a.split('/')[0].toLowerCase();
+            const nameB = b.split('/')[0].toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+    });
 }
