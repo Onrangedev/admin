@@ -1,4 +1,5 @@
 const saveBtn = document.querySelector('.save-btn');
+const spinner = document.querySelector('.spinner');
 const select = document.querySelector('.select');
 const section = document.querySelector('.itens');
 const addBtn = document.querySelector('.add-item-btn');
@@ -22,6 +23,7 @@ addBtn.addEventListener('click', () => {
 
 // Callback after api.js is loaded.
 function gapiLoaded() {
+    spinner.style.display = 'block';
     gapi.load('client', initializeGapiClient);
 }
 
@@ -64,8 +66,10 @@ async function getData() {
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
             range: 'admin!D:E',
         });
+
+        spinner.style.display = 'none';      
         
-        menu = transpose(response.result.values);        
+        menu = transpose(response.result.values);  
         loadCards(select.value);
         getAuth();
     } catch (err) {
