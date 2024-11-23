@@ -25,8 +25,6 @@ document.querySelector('.botao-configuracao').addEventListener('click', () => lo
 document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
 document.querySelectorAll('.select-almoco').forEach((element) => element.addEventListener('change', () => changeLunch(element)));
 
-loadTheme();
-
 // Callback after api.js is loaded.
 function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
@@ -218,19 +216,6 @@ function saveServer(range, array) {
 // Function for transpose (convert rows to columns)
 function transpose(matrix) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
-}
-
-// Load theme
-function loadTheme() {
-    const savedTheme = localStorage.getItem('cardapio-theme');
-
-    if (savedTheme) {
-        const theme = savedTheme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : savedTheme;
-        document.documentElement.classList.add(theme);
-    } else {
-        const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.classList.add(defaultTheme);
-    }
 }
 
 // Load animation
