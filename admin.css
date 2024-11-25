@@ -10,7 +10,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 0;
+    height: 54px;
     background-color: #1a1f24;
     width: 100%;
     margin-bottom: 20px;
