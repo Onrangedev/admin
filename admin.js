@@ -2,11 +2,14 @@ const authBtn = document.querySelector('.auth-btn');
 const singBtn = document.querySelector('.sing-btn');
 const databaseBtn = document.querySelector('.database-btn');
 const statusSelect = document.querySelector('.status-select');
-
+const settingsBtn = document.querySelector('.botao-configuracao');
+const selectSnack = document.querySelectorAll('.select-merenda');
+const selectLunch = document.querySelectorAll('.select-almoco');
 const msgAuthBtn = document.querySelector('.call-authorize');
 const loggedOutMsg = document.querySelector('.logged-out-msg');
-
 const container = document.querySelector('.container');
+const loadingScreen = document.querySelector('.loading-screen');
+const loadingBar = document.querySelector('.loading-bar');
 
 const CLIENT_ID = '293531894729-htvn6ikdidqnbt83stj818k8mmh2u3ov.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyAEOb_1iv4NXFeV7OQph2FW5UpqCUiGMcc';
@@ -20,10 +23,11 @@ let gisInited = false;
 let menu = [];
 
 statusSelect.addEventListener('change', () => changeStatus());
+settingsBtn.addEventListener('click', () => location.href = './configuracao/index.html');
+selectSnack.forEach((element) => element.addEventListener('change', () => changeSnack(element)));
+selectLunch.forEach((element) => element.addEventListener('change', () => changeLunch(element)));
 
-document.querySelector('.botao-configuracao').addEventListener('click', () => location.href = './configuracao/index.html');
-document.querySelectorAll('.select-merenda').forEach((element) => element.addEventListener('change', () => changeSnack(element)));
-document.querySelectorAll('.select-almoco').forEach((element) => element.addEventListener('change', () => changeLunch(element)));
+loadAnimation();
 
 // Callback after api.js is loaded.
 function gapiLoaded() {
@@ -75,8 +79,8 @@ async function getData() {
 // Print the snack and lunch options on the menu
 function printMenuOptions() {
     const selectElements = {
-        merenda: document.querySelectorAll('.select-merenda'),
-        almoco: document.querySelectorAll('.select-almoco')
+        merenda: selectSnack,
+        almoco: selectLunch
     };
 
     const meals = ['merenda', 'almoco'];
@@ -219,44 +223,37 @@ function transpose(matrix) {
 }
 
 // Load animation
-window.addEventListener('load', () => {
-    const loadingScreen = document.querySelector('.loading-screen');
-    setTimeout(() => loadingScreen.style.display = 'none', 1000);
-});
-
-if (!sessionStorage.getItem('animationShown')) {
-    window.addEventListener('load', () => {
-        const loadingScreen = document.querySelector('.loading-screen');
-        const loadingBar = document.querySelector('.loading-bar');
-        
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 1;
-            loadingBar.style.width = progress + '%';
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    sessionStorage.setItem('animationShown', 'true');
-                }, 500); 
-            }
-        }, 5);  
-    });
-} else {
-    const loadingScreen = document.querySelector('.loading-screen');
-    loadingScreen.style.display = 'none';
-}
-
-if (!sessionStorage.getItem('animationShown')) {
-    window.addEventListener('load', () => {
-        const loadingScreen = document.querySelector('.loading-screen');
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            sessionStorage.setItem('animationShown', 'true');
-        }, 1000);
-    });
-} else {
-    const loadingScreen = document.querySelector('.loading-screen');
-    loadingScreen.style.display = 'none';
+function loadAnimation() {
+    window.addEventListener('load', () => setTimeout(() => loadingScreen.style.display = 'none', 1000));
+    
+    if (!sessionStorage.getItem('animationShown')) {
+        window.addEventListener('load', () => {        
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 1;
+                loadingBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        sessionStorage.setItem('animationShown', 'true');
+                    }, 500); 
+                }
+            }, 5);  
+        });
+    } else {
+        loadingScreen.style.display = 'none';
+    }
+    
+    if (!sessionStorage.getItem('animationShown')) {
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                sessionStorage.setItem('animationShown', 'true');
+            }, 1000);
+        });
+    } else {
+        loadingScreen.style.display = 'none';
+    }   
 }
