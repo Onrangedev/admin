@@ -240,7 +240,7 @@ async function manageItem(action, databaseIndex, itemIndex) {
             menu[menuIndex].push(itemData);
             sortMenu();
             postData(range, [menu[menuIndex]]);
-            window.location.reload();
+            loadCards(databaseIndex);
         }
     }
 }
