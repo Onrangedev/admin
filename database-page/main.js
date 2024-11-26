@@ -78,14 +78,20 @@ async function getData() {
 }
 
 // Save data in server
-function postData(range, array) {
+async function postData(range, array, msg) {
     try {
-        gapi.client.sheets.spreadsheets.values.batchUpdate({
+        const response = await gapi.client.sheets.spreadsheets.values.batchUpdate({
             spreadsheetId: '1X1p6laul5yRw330M1ROaP8F4T70asWE7IieVsT1Qb7c',
-            resource: { data: { range: range, values: transpose(array) }, valueInputOption: 'RAW' },
-        }).then();
+            resource: {
+                data: { range: range, values: transpose(array) },
+                valueInputOption: 'RAW'
+            },
+        });
+
+        if (response.status === 200) window.alert(msg);
+        else window.alert('Erro ao alterar dados!');
     } catch (err) {
-        console.error(err.message);
+        console.error("Erro:", err.message);
     }
 }
 
@@ -156,7 +162,7 @@ function deleteItem(databaseIndex, itemIndex) {
         const lunch = clearArray(menu[1]);
         const data = [snack, lunch];
         
-        postData('admin!D:E', data);
+        postData('admin!D:E', data, 'Item DELETADO com sucesso!');
 
         deleteData("D", snack.length + 1);
         deleteData("E", lunch.length + 1);
@@ -230,7 +236,7 @@ async function manageItem(action, databaseIndex, itemIndex) {
             const snack = clearArray(menu[0]);
             const lunch = clearArray(menu[1]);
             sortMenu();
-            postData('admin!D:E', [snack, lunch]);
+            postData('admin!D:E', [snack, lunch], 'Item EDITADO com sucesso!');
             loadCards(databaseIndex);
         } else {
             const itemData = `${name}/${generateUniqueId()}/${calories}/${lactose}`;
@@ -239,7 +245,7 @@ async function manageItem(action, databaseIndex, itemIndex) {
 
             menu[menuIndex].push(itemData);
             sortMenu();
-            postData(range, [menu[menuIndex]]);
+            postData(range, [menu[menuIndex]], 'Item ADICIONADO com sucesso!');
             loadCards(databaseIndex);
         }
     }
