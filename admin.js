@@ -70,8 +70,11 @@ async function getData() {
         
         menu = transpose(response.result.values);
         printMenuOptions();
+
+        if (!response.status === 200) alert('Erro ao carregar dados!');
     } catch (err) {
         if (err.status === 401) signout();
+        alert('Erro ao carregar dados!');
         console.error(err.message);
     }
 }
@@ -214,6 +217,7 @@ function saveServer(range, array) {
         }).then();
     } catch (err) {
         console.error(err.message);
+        alert('Erro ao salvar dados no servidor!');
     }
 }
 
