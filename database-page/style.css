@@ -18,15 +18,20 @@ body {
     gap: 5px;
 }
 
-header .btn-salvar {
-    display: none;
-    background-color: var(--green);
+.header .back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
 }
-
-header .btn-salvar:hover, .btn-salvar:active {
-    background-color: var(--green);
-}
-
 
 main {
     width: 100%;
